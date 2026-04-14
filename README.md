@@ -45,32 +45,7 @@ I chose the Open Library API because it's free, well-documented, and while simpl
 
 ## ⚙️ Architecture & Process
 
-```
-EventBridge (Scheduled Rule)
-        │
-        ▼
- Lambda: Ingest
-  - Calls Open Library API
-  - Stores raw JSON response
-  - Writes to S3 (raw bucket)
-        │
-        ▼
- Lambda: Transform
-  - Reads raw JSON from S3
-  - Cleans + reshapes data with Polars
-  - Writes structured output to S3 (processed bucket)
-        │
-        ▼
-   S3: Processed Bucket
-  (structured, query-ready data)
-```
-
-**Step-by-step flow:**
-
-1. EventBridge triggers the **Ingest Lambda** on a schedule
-2. Ingest calls the Open Library API and writes the raw JSON response to `s3://raw-bucket/`
-3. The **Transform Lambda** reads the raw file, unpacks nested fields, standardizes types, and drops nulls/irrelevant columns using Polars
-4. The cleaned dataset is written to `s3://processed-bucket/` in structured format
+![My ETL pipeline](https://github.com/JuanHundred/openlibrary-aws-lambda-etl-project/blob/main/images/first_project_openlibrary_lambda.drawio.png)
 
 ---
 
